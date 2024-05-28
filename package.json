@@ -1,0 +1,20 @@
+{
+  "name": "petitsplats",
+  "version": "1.0.0",
+  "description": "Projet Petits Plats",
+  "main": "searchAlgorithm.js",
+  "type": "module",
+  "scripts": {
+    "start": "node searchAlgorithm.js",
+    "test": "vitest"
+  },
+  "author": "Ton Nom",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  }
+}

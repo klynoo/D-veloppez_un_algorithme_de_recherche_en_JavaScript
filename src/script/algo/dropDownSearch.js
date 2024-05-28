@@ -1,5 +1,3 @@
-// class pour créer un menu deroulant
-
 export class DynamicSelect {
   constructor(id, recipes, type) {
     this.selectElement = document.getElementById(id);

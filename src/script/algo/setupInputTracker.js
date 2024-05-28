@@ -6,19 +6,21 @@ function sanitizeInput(input) {
 
 export function setupInputTracker(callback) {
   const inputElement = document.getElementById("wordInput");
+  const ingredientSelectElement = document.getElementById("ingredients-select");
+  const ustensilSelectElement = document.getElementById("ustensils-select");
 
-  inputElement.addEventListener("input", (event) => {
-    let currentWord = inputElement.value;
-    currentWord = sanitizeInput(currentWord);
-    inputElement.value = currentWord;
+  function triggerCallback() {
+    const currentWord = sanitizeInput(inputElement.value);
+    const selectedIngredients = ingredientSelectElement.value;
+    const selectedUstensils = ustensilSelectElement.value;
+    callback(currentWord, selectedIngredients, selectedUstensils);
+  }
 
-    console.log("Current word:", currentWord);
-    callback(currentWord);
-  });
+  inputElement.addEventListener("input", triggerCallback);
+  ingredientSelectElement.addEventListener("change", triggerCallback);
+  ustensilSelectElement.addEventListener("change", triggerCallback);
 }
 
 document.addEventListener("DOMContentLoaded", () =>
-  setupInputTracker((word) => {
-    console.log(`Mot actuel: ${word}`);
-  })
+  setupInputTracker((word, selectedIngredients, selectedUstensils) => {})
 );

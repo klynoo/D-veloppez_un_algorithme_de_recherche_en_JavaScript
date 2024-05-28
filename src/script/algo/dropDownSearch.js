@@ -21,8 +21,8 @@ export class DynamicSelect {
         recipe.ustensils.forEach((ustensil) => {
           allElements.add(ustensil);
         });
-      } else if (this.type === "appliances") {
-        allElements.add(recipe.appliance);
+      } else if (this.type === "appareils") {
+        allElements.add(recipe.appareils);
       }
     });
     return Array.from(allElements);

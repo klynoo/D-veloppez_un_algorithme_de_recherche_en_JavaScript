@@ -11,6 +11,7 @@ export function createMainAlgo() {
       new DynamicSelect("ingredients-select", data, "ingredients")
     );
     selectors.push(new DynamicSelect("ustensils-select", data, "ustensils"));
+    selectors.push(new DynamicSelect("ustensils-appareils", data, "appareils"));
 
     setupInputTracker((word, selectedIngredients, selectedUstensils) => {
       const results = searchAlgorithm.search(word, data, {

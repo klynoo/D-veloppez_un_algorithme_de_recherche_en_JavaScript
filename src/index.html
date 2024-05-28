@@ -3,10 +3,115 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <title>Test des Classes</title>
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <h1>Test des Classes</h1>
+    <header>
+      <div class="header__logo">
+        <a href=""
+          ><img src="./asset/pictures/Les petits plats.png" />
+          <img src="./asset/pictures/Group 3.png"
+        /></a>
+      </div>
+      <form class="header__form">
+        <p class="header__form__subtitle">
+          CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN,SIMPLES ET
+          DÉLICIEUSES
+        </p>
+        <div class="header__form__search">
+          <input
+            type="search"
+            placeholder="Rechercher une recette, un ingrédient, ..."
+          />
+          <button type="submit">
+            <span><i class="fa-solid fa-magnifying-glass"></i></span>
+          </button>
+        </div>
+      </form>
+      <nav>
+        <div class="dropdown">
+          <button class="dropbtn">Ingrédients</button>
+          <div class="dropdown-content">
+            <a href="#">Crème de coco</a>
+            <!-- Plus d'ingrédients ici -->
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropbtn">Appareils</button>
+          <div class="dropdown-content">
+            <!-- Appareils ici -->
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropbtn">Ustensiles</button>
+          <div class="dropdown-content">
+            <!-- Ustensiles ici -->
+          </div>
+        </div>
+      </nav>
+
+      <main>
+        <article class="recipe">
+          <h2>Limonade de Coco</h2>
+          <img src="limonade.jpg" alt="Limonade de Coco" />
+          <p>Recette de limonade de coco rapide à faire, idéale pour l'été.</p>
+          <ul>
+            <li>40ml Lait de coco</li>
+            <li>2 Jus de citron</li>
+            <li>20g Sucre</li>
+            <li>2 Glaçons</li>
+          </ul>
+          <span>10mn</span>
+        </article>
+
+        <article class="recipe">
+          <h2>Poisson Cru à la Tahitienne</h2>
+          <img src="poisson.jpg" alt="Poisson Cru" />
+          <p>Un plat léger et frais, parfait pour les journées chaudes.</p>
+          <ul>
+            <li>200g Thon Rouge</li>
+            <li>1 Concombre</li>
+            <li>1 Carotte</li>
+            <li>5 Citron vert</li>
+          </ul>
+          <span>60mn</span>
+        </article>
+
+        <article class="recipe">
+          <h2>Poulet Coco Tumonimals</h2>
+          <img src="poulet.jpg" alt="Poulet Coco" />
+          <p>Un plat exotique et savoureux qui plaira à toute la famille.</p>
+          <ul>
+            <li>400ml Lait de coco</li>
+            <li>1 Coulis de tomate</li>
+            <li>2 Poulet</li>
+          </ul>
+          <span>80mn</span>
+        </article>
+      </main>
+
+      <footer>
+        <p>© 2024 Les Petits Plats. Tous droits réservés.</p>
+      </footer>
+    </header>
+    <!-- <h1>Test des Classes</h1>
     <div id="resultCount"></div>
     <input type="text" id="wordInput" placeholder="Entrez un mot" />
     <select name="ingredients" id="ingredients-select">
@@ -14,7 +119,7 @@
     </select>
     <select name="ustensils" id="ustensils-select">
       <option value="">Sélectionnez un ingrédient</option>
-    </select>
+    </select> -->
     <script type="module" src="script/main.js"></script>
   </body>
 </html>

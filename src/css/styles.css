@@ -1,1 +1,27 @@
 @import url("./home/header.css");
+@import url("./home/nav.css");
+
+body {
+  background: #ededed;
+}
+
+body,
+html,
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+li,
+p,
+button {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+}

@@ -46,22 +46,58 @@
       </form>
     </header>
     <nav class="nav">
-      <div class="dropdown">
-        <div id="dropdown__btn" class="dropdown__btn">
-          <button id="dropbtn" class="dropbtn">Menu</button>
+      <div id="dropdown-ingredients" class="dropdown">
+        <div id="dropdown__btn-ingredients" class="dropdown__btn">
+          <button class="dropbtn">Ingredients</button>
           <span id="dropdown__btn-span">></span>
         </div>
-        <div id="myDropdown" class="dropdown-content">
-          <form id="dropdown__search" class="dropdown__search">
+        <div id="myDropdown-ingredients" class="dropdown-content">
+          <form class="dropdown__search">
             <input id="ingredients-search" type="search" /><span
               ><i class="fa-solid fa-magnifying-glass"></i
             ></span>
           </form>
-          <ul class="dropdown__option">
-            <li href="#home">Accueil</li>
-            <li href="#services">Services</li>
-            <li href="#contact">Contact</li>
-          </ul>
+          <ul
+            id="ingredients-select"
+            name="ingredients"
+            class="dropdown__option"
+          ></ul>
+        </div>
+      </div>
+      <div id="dropdown-appliance" class="dropdown">
+        <div id="dropdown__btn-appliance" class="dropdown__btn">
+          <button class="dropbtn">Appareil</button>
+          <span id="dropdown__btn-span">></span>
+        </div>
+        <div id="myDropdown-appliance" class="dropdown-content">
+          <form class="dropdown__search">
+            <input id="appliance-search" type="search" /><span
+              ><i class="fa-solid fa-magnifying-glass"></i
+            ></span>
+          </form>
+          <ul
+            id="appliance-select"
+            name="appliance"
+            class="dropdown__option"
+          ></ul>
+        </div>
+      </div>
+      <div id="dropdown-ustensiles" class="dropdown">
+        <div id="dropdown__btn-ustensiles" class="dropdown__btn">
+          <button class="dropbtn">Ustensiles</button>
+          <span id="dropdown__btn-span">></span>
+        </div>
+        <div id="myDropdown-ustensiles" class="dropdown-content">
+          <form class="dropdown__search">
+            <input id="ustensiles-search" type="search" /><span
+              ><i class="fa-solid fa-magnifying-glass"></i
+            ></span>
+          </form>
+          <ul
+            id="ustensils-select"
+            name="ustensils"
+            class="dropdown__option"
+          ></ul>
         </div>
       </div>
     </nav>
@@ -118,8 +154,8 @@
     </select>
   </div>
   <div class="dropdown">
-    <select name="appareils" id="appareils-select">
-      <option class="dropdown__option" value="">Appareils</option>
+    <select name="appliance" id="appliance-select">
+      <option class="dropdown__option" value="">appliance</option>
     </select>
   </div>
   <div class="dropdown">

@@ -14,31 +14,27 @@ export class DynamicSelect {
     const allElements = new Set();
     this.recipes.forEach((recipe) => {
       if (this.type === "ingredients") {
-        recipe.ingredients.forEach((ingredients) => {
-          allElements.add(ingredients.ingredient);
-        });
+        recipe.ingredients.forEach((ingredient) =>
+          allElements.add(ingredient.ingredient)
+        );
       } else if (this.type === "ustensils") {
-        recipe.ustensils.forEach((ustensil) => {
-          allElements.add(ustensil);
-        });
-      } else if (this.type === "appareils") {
-        allElements.add(recipe.appareils);
+        recipe.ustensils.forEach((ustensil) => allElements.add(ustensil));
+      } else if (this.type === "appliance") {
+        allElements.add(recipe.appliance);
       }
     });
     return Array.from(allElements);
   }
 
-  // Ajouter des options au select basé sur les éléments extraits
   addOptions(options) {
     options.forEach((optionText) => {
-      const option = document.createElement("option");
+      const option = document.createElement("li");
       option.value = optionText.toLowerCase();
       option.textContent = optionText;
       this.selectElement.appendChild(option);
     });
   }
 
-  // Fonction pour initialiser et remplir le select
   populateSelect() {
     const elements = this.extractElements();
     this.addOptions(elements);

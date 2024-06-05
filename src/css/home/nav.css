@@ -1,4 +1,7 @@
 .nav {
+  display: flex;
+  gap: 66px;
+  margin-left: 105px;
 }
 .dropdown {
   /* width: 195px;
@@ -30,6 +33,7 @@
   line-height: normal;
   background: #fff;
   border: none;
+  cursor: pointer;
 }
 
 .dropdown-content {
@@ -96,18 +100,28 @@
 .dropdown__option {
   display: flex;
   flex-direction: column;
-  gap: 13px;
-  margin-left: 16px;
   height: 100px;
+  height: 250px;
+  overflow-y: auto;
+}
+
+.dropdown__option::-webkit-scrollbar {
+  width: 0px;
 }
 
 .dropdown__option li {
+  padding: 8px 0px 8px 16px;
   color: var(--Black, #1b1b1b);
   font-family: Manrope;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  cursor: pointer;
+}
+
+.dropdown__option li:hover {
+  background: #ffd15b;
 }
 
 .dropdown-content.show {

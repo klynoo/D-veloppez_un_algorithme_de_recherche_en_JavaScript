@@ -1,4 +1,6 @@
 export class Dropdown {
+  static instances = [];
+
   constructor(config) {
     this.config = config;
     this.dropdownElement = document.querySelector(config.dropdownSelector);
@@ -11,42 +13,35 @@ export class Dropdown {
     this.searchInput = this.dropdownElement.querySelector(
       config.searchInputSelector
     );
-
     this.initEvents();
+    Dropdown.instances.push(this);
   }
 
   initEvents() {
     this.dropdownButton.addEventListener("click", (event) => {
       event.stopPropagation();
+      Dropdown.closeAllDropdowns(this);
       this.toggleDropdown();
     });
 
-    this.searchInput.addEventListener("click", (event) => {
-      event.stopPropagation();
-    });
+    this.searchInput.addEventListener("click", (event) =>
+      event.stopPropagation()
+    );
+
+    document.addEventListener("click", Dropdown.closeAllDropdowns);
   }
 
   toggleDropdown() {
     this.dropdownContent.classList.toggle("show");
-    console.log(
-      "Dropdown visibility toggled. Current state:",
-      this.dropdownContent.classList.contains("show") ? "Visible" : "Hidden"
-    );
   }
 
-  static closeAllDropdowns(event, dropdownInstances) {
-    dropdownInstances.forEach((dropdown) => {
-      const dropdownButton = dropdown.dropdownButton;
-      const searchInput = dropdown.searchInput;
-      const dropdownContent = dropdown.dropdownContent;
-
+  static closeAllDropdowns(currentDropdown = null) {
+    Dropdown.instances.forEach((dropdown) => {
       if (
-        !dropdownButton.contains(event.target) &&
-        !searchInput.contains(event.target) &&
-        dropdownContent.classList.contains("show")
+        dropdown !== currentDropdown &&
+        dropdown.dropdownContent.classList.contains("show")
       ) {
-        dropdownContent.classList.remove("show");
-        console.log("Dropdown closed due to click outside.");
+        dropdown.dropdownContent.classList.remove("show");
       }
     });
   }

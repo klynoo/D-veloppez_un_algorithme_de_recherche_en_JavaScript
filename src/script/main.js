@@ -2,33 +2,50 @@ import { ApiFetch } from "./api/ApiFetch.js";
 import { createMainAlgo } from "./algo/mainAlgo.js";
 import { Dropdown } from "./component/dropdow.js";
 
-const apiFetcher = new ApiFetch("./asset/data/recipes.json");
+document.addEventListener("DOMContentLoaded", async () => {
+  const apiFetcher = new ApiFetch("./asset/data/recipes.json");
+  let globalData = null;
+  let mainAlgoInstance = createMainAlgo();
 
-let globalData = null;
+  try {
+    const data = await apiFetcher.fetchData();
+    if (data) {
+      console.log("Data fetched successfully:", data);
+      globalData = data;
+      mainAlgoInstance.initialize(data, {
+        includeDescription: true,
+        includeIngredients: false,
+      });
+    } else {
+      console.log("Failed to fetch data");
+    }
+  } catch (error) {
+    console.error("Error in fetching data:", error);
+  }
 
-// Algorithm de recherche
-let mainAlgoInstance = createMainAlgo();
+  // Configuration pour les dropdowns
+  const configs = [
+    {
+      dropdownSelector: "#dropdown-ingredients",
+      buttonSelector: "#dropdown__btn-ingredients",
+      contentSelector: "#myDropdown-ingredients",
+      searchInputSelector: "#ingredients-search",
+    },
+    {
+      dropdownSelector: "#dropdown-appliance",
+      buttonSelector: "#dropdown__btn-appliance",
+      contentSelector: "#myDropdown-appliance",
+      searchInputSelector: "#appliance-search",
+    },
+    {
+      dropdownSelector: "#dropdown-ustensiles",
+      buttonSelector: "#dropdown__btn-ustensiles",
+      contentSelector: "#myDropdown-ustensiles",
+      searchInputSelector: "#ustensiles-search",
+    },
+  ];
 
-apiFetcher.fetchData((data) => {
-  globalData = data;
-  mainAlgoInstance.initialize(data, {
-    includeDescription: true,
-    includeIngredients: false,
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Configuration pour le premier dropdown
-  const dropdownConfig = {
-    dropdownSelector: ".dropdown",
-    buttonSelector: "#dropdown__btn",
-    contentSelector: ".dropdown-content",
-    searchInputSelector: "#ingredients-search",
-  };
-
-  const dropdown1 = new Dropdown(dropdownConfig);
-
-  const dropdowns = [dropdown1];
+  const dropdowns = configs.map((config) => new Dropdown(config));
 
   document.addEventListener(
     "click",

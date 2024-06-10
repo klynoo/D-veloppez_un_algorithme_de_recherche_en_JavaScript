@@ -24,6 +24,13 @@ export function setupInputTracker(callback) {
 
   function triggerCallback() {
     const currentWord = sanitizeInput(inputElement.value);
+    updateSelectedFiltersDisplay(
+      ingredientSelectElement,
+      "selected-ingredients"
+    );
+    updateSelectedFiltersDisplay(ustensilSelectElement, "selected-ustensils");
+    updateSelectedFiltersDisplay(applianceSelectElement, "selected-appliances");
+
     const selectedIngredients = getSelectedValues(ingredientSelectElement);
     const selectedUstensils = getSelectedValues(ustensilSelectElement);
     const selectedAppliances = getSelectedValues(applianceSelectElement);
@@ -49,16 +56,42 @@ export function setupInputTracker(callback) {
     );
   }
 
+  function updateSelectedFiltersDisplay(selectElement, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
+
+    const allSelectedItems = selectElement.querySelectorAll("li.selected");
+    allSelectedItems.forEach((item) => {
+      const badge = document.createElement("div");
+      badge.className = "filter-badge";
+      const badgeP = document.createElement("p");
+      badgeP.textContent = item.textContent.trim();
+      const badgeX = document.createElement("span");
+      badgeX.textContent = " X";
+
+      badge.addEventListener("click", function () {
+        item.classList.remove("selected");
+        updateSelectedFiltersDisplay(selectElement, containerId);
+        triggerCallback();
+      });
+      badge.appendChild(badgeP);
+      badge.appendChild(badgeX);
+
+      container.appendChild(badge);
+    });
+  }
+
   inputElement.addEventListener("input", triggerCallback);
 
   [
-    ingredientSelectElement,
-    ustensilSelectElement,
-    applianceSelectElement,
-  ].forEach((selectElement) => {
-    selectElement.addEventListener("click", (event) => {
+    { element: ingredientSelectElement, id: "ingredients" },
+    { element: ustensilSelectElement, id: "ustensils" },
+    { element: applianceSelectElement, id: "appliances" },
+  ].forEach(({ element, id }) => {
+    element.addEventListener("click", (event) => {
       if (event.target.tagName === "LI") {
         event.target.classList.toggle("selected");
+        updateSelectedFiltersDisplay(element, `selected-${id}`);
         triggerCallback();
       }
     });

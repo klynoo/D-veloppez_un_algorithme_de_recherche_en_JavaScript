@@ -1,5 +1,6 @@
 @import url("./home/header.css");
 @import url("./home/nav.css");
+@import url("./home/main.css");
 
 body {
   background: #ededed;

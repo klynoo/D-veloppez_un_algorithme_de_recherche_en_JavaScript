@@ -1,89 +1,97 @@
 import { describe, it, expect } from "vitest";
 import { SearchAlgorithm } from "../src/script/algo/searchAlgorithm";
 
-describe("SearchAlgorithm Tests", () => {
-  const searchAlgorithm = new SearchAlgorithm();
-  const mockData = [
+// Initialisation de la classe SearchAlgorithm
+const searchAlgorithm = new SearchAlgorithm();
+
+describe("Tests de SearchAlgorithm", () => {
+  const donneesTest = [
     {
       name: "Pomme",
       description: "Une pomme rouge",
       ingredients: [{ ingredient: "pomme" }],
-      ustensils: ["verres"],
+      ustensils: ["verre"],
+      appliance: "blender",
     },
     {
       name: "Banane",
       description: "Un fruit jaune",
       ingredients: [{ ingredient: "banane" }],
-      ustensils: ["fourchette", "verres"],
+      ustensils: ["fourchette", "verre"],
+      appliance: "mixeur",
     },
     {
       name: "Cerise",
       description: "Petit fruit rond",
       ingredients: [{ ingredient: "cerise" }],
       ustensils: ["couteau"],
+      appliance: "robot",
+    },
+    {
+      name: "gateau pomme poire",
+      description: "Une pomme rouge",
+      ingredients: [{ ingredient: "pomme" }, { ingredient: "poire" }],
+      ustensils: ["verre"],
+      appliance: "four",
     },
   ];
 
-  it("search doit retourner les bonnes correspondances", () => {
-    // Test pour 'pomme'
-    const results1 = searchAlgorithm.search("pomme", mockData);
-    expect(results1).toHaveLength(1);
-    expect(results1[0].name).toBe("Pomme");
-
-    // Test pour 'e'
-    const results2 = searchAlgorithm.search("e", mockData);
-    expect(results2).toHaveLength(3);
-    expect(results2.map((item) => item.name)).toEqual(
-      expect.arrayContaining(["Pomme", "Banane", "Cerise"])
-    );
-
-    // Test pour 'e' avec option ingredient "cerise"
-    const results3 = searchAlgorithm.search("e", mockData, {
-      includeIngredient: "cerise",
-    });
-    expect(results3).toHaveLength(1);
-    expect(results3.map((item) => item.name)).toEqual(
-      expect.arrayContaining(["Cerise"])
-    );
-
-    // Test pour 'n' avec option ingredient "cerise"
-    const results4 = searchAlgorithm.search("n", mockData, {
-      includeIngredient: "cerise",
-    });
-    expect(results4).toHaveLength(1);
-    expect(results4.map((item) => item.name)).toEqual(
-      expect.arrayContaining(["Cerise"])
-    );
-
-    // Test pour 'n' avec option ustensil "verres"
-    const results5 = searchAlgorithm.search("n", mockData, {
-      includeUstensil: "verres",
-    });
-    expect(results5).toHaveLength(2);
-    expect(results5.map((item) => item.name)).toEqual(
-      expect.arrayContaining(["Banane"])
-    );
-
-    // Test pour 'e' avec option ingredient "cerise" et ustensil "verres"
-    const results6 = searchAlgorithm.search("e", mockData, {
-      includeIngredient: "cerise",
-      includeUstensil: "verres",
-    });
-    expect(results6).toHaveLength(0);
+  it("ne doit pas retourner de résultats si l'entrée contient moins de 2 caractères", () => {
+    const resultats = searchAlgorithm.search("p", donneesTest);
+    expect(resultats).toHaveLength(0);
   });
 
-  it("should handle edge cases gracefully", () => {
-    // Test avec une chaîne vide
-    const results1 = searchAlgorithm.search("", mockData);
-    expect(results1).toHaveLength(0);
+  it("doit filtrer les recettes contenant 'pomme' dans les ingrédients", () => {
+    const resultats = searchAlgorithm.searchIngredients("pomme", donneesTest);
+    expect(resultats).toHaveLength(2);
+    expect(resultats.some((r) => r.name === "Pomme")).toBeTruthy();
+    expect(resultats.some((r) => r.name === "gateau pomme poire")).toBeTruthy();
+  });
 
-    // Test avec des données vides
-    const results2 = searchAlgorithm.search("pomme", []);
-    expect(results2).toHaveLength(0);
+  it("doit filtrer les recettes contenant 'pomme' dans les ingrédients et 'Une' dans la description", () => {
+    const resultats = searchAlgorithm.searchGeneral("pomme", donneesTest);
+    const resultatsFinaux = resultats.filter((r) =>
+      r.description.toLowerCase().includes("une")
+    );
+    expect(resultatsFinaux).toHaveLength(2);
+    expect(resultatsFinaux.some((r) => r.name === "Pomme")).toBeTruthy();
+    expect(
+      resultatsFinaux.some((r) => r.name === "gateau pomme poire")
+    ).toBeTruthy();
+  });
 
-    // Test avec des options vides
-    const results3 = searchAlgorithm.search("pomme", mockData, {});
-    expect(results3).toHaveLength(1);
-    expect(results3[0].name).toBe("Pomme");
+  it("doit filtrer les recettes contenant 'pomme' dans les ingrédients, 'Une' dans la description, et 'verre' dans les ustensiles", () => {
+    const resultats = searchAlgorithm.search("pomme", donneesTest, [
+      "ingredients",
+      "description",
+      "ustensils",
+    ]);
+    const resultatsFinaux = resultats.filter(
+      (r) =>
+        r.description.toLowerCase().includes("une") &&
+        r.ustensils.includes("verre")
+    );
+    expect(resultatsFinaux).toHaveLength(2);
+    expect(resultatsFinaux.some((r) => r.name === "Pomme")).toBeTruthy();
+    expect(
+      resultatsFinaux.some((r) => r.name === "gateau pomme poire")
+    ).toBeTruthy();
+  });
+
+  it("doit filtrer les recettes contenant 'pomme' dans les ingrédients et à la fois 'verre' et 'couteau' dans les ustensiles", () => {
+    const resultats = searchAlgorithm.search("pomme", donneesTest, [
+      "ingredients",
+      "ustensils",
+    ]);
+    const resultatsFinaux = resultats.filter(
+      (r) => r.ustensils.includes("verre") && r.ustensils.includes("couteau")
+    );
+    expect(resultatsFinaux).toHaveLength(0);
+  });
+
+  it("doit filtrer les recettes contenant 'blender' comme appareil", () => {
+    const resultats = searchAlgorithm.searchAppliances("blender", donneesTest);
+    expect(resultats).toHaveLength(1);
+    expect(resultats.some((r) => r.name === "Pomme")).toBeTruthy();
   });
 });

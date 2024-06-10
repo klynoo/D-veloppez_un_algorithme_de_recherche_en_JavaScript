@@ -1,6 +1,7 @@
 import { ApiFetch } from "./api/ApiFetch.js";
 import { createMainAlgo } from "./algo/mainAlgo.js";
-import { Dropdown } from "./component/dropdow.js";
+import { Dropdown } from "./component/dropdown.js";
+import { recipeTemplate } from "./template/templateIndex.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   const apiFetcher = new ApiFetch("./asset/data/recipes.json");
@@ -8,13 +9,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   let mainAlgoInstance = createMainAlgo();
 
   try {
-    const data = await apiFetcher.fetchData();
-    if (data) {
-      console.log("Data fetched successfully:", data);
-      globalData = data;
-      mainAlgoInstance.initialize(data, {
+    const recipesData = await apiFetcher.fetchData();
+    if (recipesData && recipesData.length > 0) {
+      console.log("Data fetched successfully:", recipesData);
+      globalData = recipesData;
+      mainAlgoInstance.initialize(recipesData, {
         includeDescription: true,
         includeIngredients: false,
+      });
+      console.log("Initialization complete");
+      const mainRecipe = document.getElementById("main-recipe");
+
+      // Parcourir toutes les recettes et les ajouter au DOM
+      recipesData.forEach((recipe) => {
+        const recipeElement = recipeTemplate(recipe);
+        mainRecipe.appendChild(recipeElement);
       });
     } else {
       console.log("Failed to fetch data");

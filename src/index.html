@@ -29,10 +29,10 @@
         /></a>
       </div>
       <form class="header__form">
-        <p class="header__form__subtitle">
+        <h1 class="header__form__subtitle">
           CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN,SIMPLES ET
           DÉLICIEUSES
-        </p>
+        </h1>
         <div class="header__form__search">
           <input
             id="wordInput"
@@ -63,6 +63,7 @@
             class="dropdown__option"
           ></ul>
         </div>
+        <div id="selected-ingredients"></div>
       </div>
       <div id="dropdown-appliance" class="dropdown">
         <div id="dropdown__btn-appliance" class="dropdown__btn">
@@ -81,6 +82,7 @@
             class="dropdown__option"
           ></ul>
         </div>
+        <div id="selected-appliances"></div>
       </div>
       <div id="dropdown-ustensiles" class="dropdown">
         <div id="dropdown__btn-ustensiles" class="dropdown__btn">
@@ -99,68 +101,36 @@
             class="dropdown__option"
           ></ul>
         </div>
+        <div id="selected-ustensils"></div>
       </div>
     </nav>
-    <main>
-      <article class="recipe">
-        <h2>Limonade de Coco</h2>
-        <img src="" alt="Limonade de Coco" />
-        <p>Recette de limonade de coco rapide à faire, idéale pour l'été.</p>
-        <ul>
-          <li>40ml Lait de coco</li>
-          <li>2 Jus de citron</li>
-          <li>20g Sucre</li>
-          <li>2 Glaçons</li>
-        </ul>
-        <span>10mn</span>
-      </article>
 
-      <article class="recipe">
-        <h2>Poisson Cru à la Tahitienne</h2>
-        <img src="" alt="Poisson Cru" />
-        <p>Un plat léger et frais, parfait pour les journées chaudes.</p>
-        <ul>
-          <li>200g Thon Rouge</li>
-          <li>1 Concombre</li>
-          <li>1 Carotte</li>
-          <li>5 Citron vert</li>
-        </ul>
-        <span>60mn</span>
-      </article>
-
-      <article class="recipe">
-        <h2>Poulet Coco Tumonimals</h2>
-        <img src="" alt="Poulet Coco" />
-        <p>Un plat exotique et savoureux qui plaira à toute la famille.</p>
-        <ul>
-          <li>400ml Lait de coco</li>
-          <li>1 Coulis de tomate</li>
-          <li>2 Poulet</li>
-        </ul>
-        <span>80mn</span>
-      </article>
+    <main id="main-recipe" class="main-recipe">
+      <!-- <article class="recipe">
+        <div class="recipe__img">
+          <img src="./asset/pictures/recette01.png" alt="Limonade de Coco" />
+        </div>
+        <div class="recipe__container">
+          <h2>Limonade de Coco</h2>
+          <h3>Recette</h3>
+          <p>
+            Mettre les glaçons à votre goût dans le blender, Ajouter le lait la
+            crème de coco, le jus de 2 citrons et le sucre ensemble. Mixer
+            jusqu'à obtenir la consistance désirée.
+          </p>
+          <div class="recipe__ingredients">
+            <h3>Ingrédients</h3>
+            <ul>
+              <li>Lait de coco <span>40ml </span></li>
+              <li>Jus de citron <span>2</span></li>
+              <li>Sucre <span>20g </span></li>
+              <li>Glaçons <span>2</span></li>
+            </ul>
+          </div>
+        </div>
+      </article> -->
     </main>
 
-    <footer>
-      <p>© 2024 Les Petits Plats. Tous droits réservés.</p>
-    </footer>
     <script type="module" src="script/main.js"></script>
   </body>
 </html>
-<!-- <div class="nav_container">
-  <div class="dropdown">
-    <select name="ingredients" id="ingredients-select">
-      <option value="">Ingrédients</option>
-    </select>
-  </div>
-  <div class="dropdown">
-    <select name="appliance" id="appliance-select">
-      <option class="dropdown__option" value="">appliance</option>
-    </select>
-  </div>
-  <div class="dropdown">
-    <select name="ustensils" id="ustensils-select">
-      <option value="">Ustensiles</option>
-    </select>
-  </div>
-</div> -->

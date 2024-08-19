@@ -7,6 +7,7 @@
 }
 
 .recipe {
+  position: relative;
   height: 730px;
   width: 380px;
   background-color: #fff;
@@ -19,6 +20,23 @@
   height: 253px;
 }
 
+.recipe__img span {
+  position: absolute;
+  color: black;
+  top: 21px;
+  right: 23px;
+  padding: 5px 15px;
+  border-radius: 14px;
+  background: var(--Yellow, #ffd15b);
+  color: var(--Black, #1b1b1b);
+  text-align: center;
+  font-family: Manrope;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 .recipe__img img {
   border-radius: 21px 21px 0px 0px;
 }
@@ -26,7 +44,13 @@
 .recipe__container {
   display: flex;
   flex-direction: column;
+  height: 413px;
+  overflow-y: auto;
   margin: 32px 25px 0px 25px;
+}
+
+.recipe__container::-webkit-scrollbar {
+  width: 0px;
 }
 
 .recipe__container h2 {

@@ -1,6 +1,6 @@
 import { ApiFetch } from "./api/ApiFetch.js";
 import { createMainAlgo } from "./algo/mainAlgo.js";
-import { Dropdown } from "./component/dropdown.js";
+import { Dropdown } from "./component/dropDown/useFilter.js";
 import { recipeTemplate } from "./template/templateIndex.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -13,11 +13,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (recipesData && recipesData.length > 0) {
       console.log("Data fetched successfully:", recipesData);
       globalData = recipesData;
-      mainAlgoInstance.initialize(recipesData, {
-        includeDescription: true,
-        includeIngredients: false,
-      });
-      console.log("Initialization complete");
+      mainAlgoInstance.initialize(recipesData, {});
+
       const mainRecipe = document.getElementById("main-recipe");
 
       // Parcourir toutes les recettes et les ajouter au DOM
@@ -50,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       dropdownSelector: "#dropdown-ustensiles",
       buttonSelector: "#dropdown__btn-ustensiles",
       contentSelector: "#myDropdown-ustensiles",
-      searchInputSelector: "#ustensiles-search",
+      searchInputSelector: "#ustensils-search",
     },
   ];
 

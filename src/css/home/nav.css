@@ -147,3 +147,49 @@ span {
   font-weight: 400;
   line-height: normal;
 }
+
+.selected {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: #ffd15b;
+}
+.selected:hover {
+  color: var(--Black, #1b1b1b);
+  font-family: Manrope;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.selected::after {
+  content: none;
+  width: 17px;
+  height: 17px;
+  position: relative;
+  top: 50%;
+  right: 14px;
+  transform: translate(0, -50%);
+  display: block;
+}
+
+.selected:hover::after {
+  content: url("../../asset/pictures/Group 11.svg");
+}
+
+.number-recipe {
+  display: flex;
+  align-items: center;
+}
+
+.number-recipe p {
+  position: absolute;
+  right: 100px;
+  color: var(--Black, #1b1b1b);
+  font-family: Anton;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

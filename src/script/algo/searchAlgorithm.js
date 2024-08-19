@@ -36,46 +36,147 @@ const filterFunctions = {
   ustensils: filterByUstensils,
 };
 
-export class SearchAlgorithm {
+export class SearchAlgorithmArray {
   // Fonction principale de recherche
   search(
-    input,
-    data,
-    options = ["name", "description", "ingredients", "appliance", "ustensils"]
+    recipes,
+    text = "",
+    ingredientsKeywords = [],
+    appliancesKeywords = [],
+    ustensilsKeywords = []
   ) {
-    if (input.length < 2) {
-      console.log("La taille est inférieure à 3 caractères.");
-      return [];
+    const searchQuery = text.toLowerCase();
+
+    let results = recipes;
+
+    // Recherche par le texte principal
+    if (text.length > 2) {
+      results = recipes.filter((item) => {
+        return (
+          filterFunctions.name(item, searchQuery) ||
+          filterFunctions.description(item, searchQuery) ||
+          filterFunctions.ingredients(item, searchQuery) ||
+          filterFunctions.appliance(item, searchQuery) ||
+          filterFunctions.ustensils(item, searchQuery)
+        );
+      });
     }
 
-    console.log("La taille fait 3 caractères ou plus.");
-    const searchQuery = input.toLowerCase();
+    // Filtrer par ingrédients
+    if (ingredientsKeywords.length > 0) {
+      results = results.filter((recipe) =>
+        ingredientsKeywords.every((ing) =>
+          recipe.ingredients.some((i) => i.ingredient.toLowerCase() === ing)
+        )
+      );
+    }
 
-    const results = data.filter((item) => {
-      return options.some((option) => {
-        const filterFunction = filterFunctions[option];
-        return filterFunction ? filterFunction(item, searchQuery) : false;
-      });
-    });
+    // Filtrer par ustensiles
+    if (ustensilsKeywords.length > 0) {
+      results = results.filter((recipe) =>
+        ustensilsKeywords.every((ust) =>
+          recipe.ustensils.some((u) => u.toLowerCase() === ust)
+        )
+      );
+    }
+
+    // Filtrer par appareils
+    if (appliancesKeywords.length > 0) {
+      results = results.filter((recipe) =>
+        appliancesKeywords.includes(recipe.appliance.toLowerCase())
+      );
+    }
 
     console.log("Résultats trouvés:", results);
     return results;
   }
+}
 
-  // Fonctions spécialisées pour chaque type de filtre
-  searchIngredients(input, data) {
-    return this.search(input, data, ["ingredients"]);
-  }
+export class SearchAlgorithmLoops {
+  // Fonction principale de recherche
+  search(
+    recipes,
+    text = "",
+    ingredientsKeywords = [],
+    appliancesKeywords = [],
+    ustensilsKeywords = []
+  ) {
+    const searchQuery = text.toLowerCase();
+    let results = recipes; // Initialiser avec toutes les recettes
 
-  searchAppliances(input, data) {
-    return this.search(input, data, ["appliance"]);
-  }
+    // Recherche par le texte principal
+    if (text.length > 2) {
+      const tempResults = [];
+      for (let i = 0; i < results.length; i++) {
+        const item = results[i];
+        if (
+          filterFunctions.name(item, searchQuery) ||
+          filterFunctions.description(item, searchQuery) ||
+          filterFunctions.ingredients(item, searchQuery) ||
+          filterFunctions.appliance(item, searchQuery) ||
+          filterFunctions.ustensils(item, searchQuery)
+        ) {
+          tempResults.push(item);
+        }
+      }
+      results = tempResults;
+    }
 
-  searchUstensils(input, data) {
-    return this.search(input, data, ["ustensils"]);
-  }
+    // Filtrer par ingrédients
+    if (ingredientsKeywords.length > 0) {
+      const tempResults = [];
+      for (let i = 0; i < results.length; i++) {
+        const recipe = results[i];
+        let allIngredientsMatch = true;
+        for (let j = 0; j < ingredientsKeywords.length; j++) {
+          const ing = ingredientsKeywords[j].toLowerCase();
+          if (
+            !recipe.ingredients.some((i) => i.ingredient.toLowerCase() === ing)
+          ) {
+            allIngredientsMatch = false;
+            break;
+          }
+        }
+        if (allIngredientsMatch) {
+          tempResults.push(recipe);
+        }
+      }
+      results = tempResults;
+    }
 
-  searchGeneral(input, data) {
-    return this.search(input, data, ["name", "description"]);
+    // Filtrer par ustensiles
+    if (ustensilsKeywords.length > 0) {
+      const tempResults = [];
+      for (let i = 0; i < results.length; i++) {
+        const recipe = results[i];
+        let allUstensilsMatch = true;
+        for (let j = 0; j < ustensilsKeywords.length; j++) {
+          const ust = ustensilsKeywords[j].toLowerCase();
+          if (!recipe.ustensils.some((u) => u.toLowerCase() === ust)) {
+            allUstensilsMatch = false;
+            break;
+          }
+        }
+        if (allUstensilsMatch) {
+          tempResults.push(recipe);
+        }
+      }
+      results = tempResults;
+    }
+
+    // Filtrer par appareils
+    if (appliancesKeywords.length > 0) {
+      const tempResults = [];
+      for (let i = 0; i < results.length; i++) {
+        const recipe = results[i];
+        if (appliancesKeywords.includes(recipe.appliance.toLowerCase())) {
+          tempResults.push(recipe);
+        }
+      }
+      results = tempResults;
+    }
+
+    console.log("Résultats trouvés:", results);
+    return results;
   }
 }

@@ -1,97 +1,213 @@
-import { describe, it, expect } from "vitest";
-import { SearchAlgorithm } from "../src/script/algo/searchAlgorithm";
+import { beforeEach, describe, expect, test } from "vitest";
 
-// Initialisation de la classe SearchAlgorithm
-const searchAlgorithm = new SearchAlgorithm();
+// Mock des fonctions de filtre utilisées par search
+const filterFunctions = {
+  name: (item, query) => item.name.toLowerCase().includes(query),
+  description: (item, query) => item.description.toLowerCase().includes(query),
+  ingredients: (item, query) =>
+    item.ingredients.some((ingredient) =>
+      ingredient.ingredient.toLowerCase().includes(query)
+    ),
+  appliance: (item, query) => item.appliance.toLowerCase().includes(query),
+  ustensils: (item, query) =>
+    item.ustensils.some((ustensil) => ustensil.toLowerCase().includes(query)),
+};
 
-describe("Tests de SearchAlgorithm", () => {
-  const donneesTest = [
-    {
-      name: "Pomme",
-      description: "Une pomme rouge",
-      ingredients: [{ ingredient: "pomme" }],
-      ustensils: ["verre"],
-      appliance: "blender",
-    },
-    {
-      name: "Banane",
-      description: "Un fruit jaune",
-      ingredients: [{ ingredient: "banane" }],
-      ustensils: ["fourchette", "verre"],
-      appliance: "mixeur",
-    },
-    {
-      name: "Cerise",
-      description: "Petit fruit rond",
-      ingredients: [{ ingredient: "cerise" }],
-      ustensils: ["couteau"],
-      appliance: "robot",
-    },
-    {
-      name: "gateau pomme poire",
-      description: "Une pomme rouge",
-      ingredients: [{ ingredient: "pomme" }, { ingredient: "poire" }],
-      ustensils: ["verre"],
-      appliance: "four",
-    },
-  ];
+// Exemple de recettes pour les tests
+const recipes = [
+  {
+    name: "Tarte aux pommes",
+    description: "Une délicieuse tarte avec des pommes et du sucre.",
+    ingredients: [
+      { ingredient: "Pomme" },
+      { ingredient: "Sucre" },
+      { ingredient: "Farine" },
+    ],
+    appliance: "Four",
+    ustensils: ["Moule", "Couteau"],
+  },
+  {
+    name: "Poisson grillé",
+    description: "Un poisson grillé avec des herbes.",
+    ingredients: [
+      { ingredient: "Poisson" },
+      { ingredient: "Herbes" },
+      { ingredient: "Citron" },
+    ],
+    appliance: "Grill",
+    ustensils: ["Grille", "Couteau"],
+  },
+  {
+    name: "Salade de fruits",
+    description: "Un mélange de fruits frais.",
+    ingredients: [
+      { ingredient: "Pomme" },
+      { ingredient: "Banane" },
+      { ingredient: "Orange" },
+    ],
+    appliance: "Saladier",
+    ustensils: ["Couteau", "Cuillère"],
+  },
+];
 
-  it("ne doit pas retourner de résultats si l'entrée contient moins de 2 caractères", () => {
-    const resultats = searchAlgorithm.search("p", donneesTest);
-    expect(resultats).toHaveLength(0);
+import { SearchAlgorithmArray } from "../src/script/algo/searchAlgorithm";
+
+describe("SearchAlgorithmArray", () => {
+  let searchAlgo;
+
+  beforeEach(() => {
+    searchAlgo = new SearchAlgorithmArray();
   });
 
-  it("doit filtrer les recettes contenant 'pomme' dans les ingrédients", () => {
-    const resultats = searchAlgorithm.searchIngredients("pomme", donneesTest);
-    expect(resultats).toHaveLength(2);
-    expect(resultats.some((r) => r.name === "Pomme")).toBeTruthy();
-    expect(resultats.some((r) => r.name === "gateau pomme poire")).toBeTruthy();
+  test("Cas nominal: Recherche par texte", () => {
+    const result = searchAlgo.search(recipes, "tarte");
+    expect(result.length).toBe(1);
+    expect(result[0].name).toBe("Tarte aux pommes");
   });
 
-  it("doit filtrer les recettes contenant 'pomme' dans les ingrédients et 'Une' dans la description", () => {
-    const resultats = searchAlgorithm.searchGeneral("pomme", donneesTest);
-    const resultatsFinaux = resultats.filter((r) =>
-      r.description.toLowerCase().includes("une")
+  test("Cas alternatif A1: Aucune recette ne correspond à la recherche", () => {
+    const result = searchAlgo.search(recipes, "chocolat");
+    expect(result.length).toBe(0);
+    // Simuler l'affichage du message "Aucune recette ne contient..."
+  });
+
+  test("Cas alternatif A2: Recherche par tag (ingrédient)", () => {
+    const result = searchAlgo.search(recipes, "", ["pomme"]);
+    expect(result.length).toBe(2); // Devrait retourner "Tarte aux pommes" et "Salade de fruits"
+  });
+
+  test("Cas alternatif A3: Recherche avancée avec plusieurs tags", () => {
+    const result = searchAlgo.search(
+      recipes,
+      "",
+      ["pomme"],
+      ["four"],
+      ["moule"]
     );
-    expect(resultatsFinaux).toHaveLength(2);
-    expect(resultatsFinaux.some((r) => r.name === "Pomme")).toBeTruthy();
-    expect(
-      resultatsFinaux.some((r) => r.name === "gateau pomme poire")
-    ).toBeTruthy();
+    expect(result.length).toBe(1); // Devrait retourner seulement "Tarte aux pommes"
   });
 
-  it("doit filtrer les recettes contenant 'pomme' dans les ingrédients, 'Une' dans la description, et 'verre' dans les ustensiles", () => {
-    const resultats = searchAlgorithm.search("pomme", donneesTest, [
-      "ingredients",
-      "description",
-      "ustensils",
-    ]);
-    const resultatsFinaux = resultats.filter(
-      (r) =>
-        r.description.toLowerCase().includes("une") &&
-        r.ustensils.includes("verre")
+  test("Recherche avec plusieurs mots-clés dans différents champs", () => {
+    const result = searchAlgo.search(
+      recipes,
+      "grill",
+      [],
+      ["grill"],
+      ["grille"]
     );
-    expect(resultatsFinaux).toHaveLength(2);
-    expect(resultatsFinaux.some((r) => r.name === "Pomme")).toBeTruthy();
-    expect(
-      resultatsFinaux.some((r) => r.name === "gateau pomme poire")
-    ).toBeTruthy();
+    expect(result.length).toBe(1);
+    expect(result[0].name).toBe("Poisson grillé");
   });
 
-  it("doit filtrer les recettes contenant 'pomme' dans les ingrédients et à la fois 'verre' et 'couteau' dans les ustensiles", () => {
-    const resultats = searchAlgorithm.search("pomme", donneesTest, [
-      "ingredients",
-      "ustensils",
-    ]);
-    const resultatsFinaux = resultats.filter(
-      (r) => r.ustensils.includes("verre") && r.ustensils.includes("couteau")
+  test("Filtrage par plusieurs mots-clés d'ingrédients", () => {
+    const result = searchAlgo.search(recipes, "", ["pomme", "sucre"]);
+    expect(result.length).toBe(1); // Devrait retourner "Tarte aux pommes"
+  });
+
+  test("Filtrage par plusieurs ustensiles", () => {
+    const result = searchAlgo.search(recipes, "", [], [], ["couteau"]);
+    expect(result.length).toBe(3); // Devrait retourner toutes les recettes car toutes utilisent un couteau
+  });
+
+  test("Filtrage par appareil spécifique", () => {
+    const result = searchAlgo.search(recipes, "", [], ["four"]);
+    expect(result.length).toBe(1); // Devrait retourner seulement "Tarte aux pommes"
+  });
+
+  test("Filtrage par combinaison d'appareils et d'ingrédients", () => {
+    const result = searchAlgo.search(recipes, "", ["pomme"], ["four"], []);
+    expect(result.length).toBe(1); // Devrait retourner "Tarte aux pommes"
+  });
+
+  test("Recherche avec combinaison de texte et tags", () => {
+    const result = searchAlgo.search(
+      recipes,
+      "grill",
+      ["poisson"],
+      ["grill"],
+      ["grille"]
     );
-    expect(resultatsFinaux).toHaveLength(0);
+    expect(result.length).toBe(1); // Devrait retourner "Poisson grillé"
+  });
+});
+
+import { SearchAlgorithmLoops } from "../src/script/algo/searchAlgorithm";
+
+describe("SearchAlgorithmLoops", () => {
+  let searchAlgo;
+
+  beforeEach(() => {
+    searchAlgo = new SearchAlgorithmLoops();
   });
 
-  it("doit filtrer les recettes contenant 'blender' comme appareil", () => {
-    const resultats = searchAlgorithm.searchAppliances("blender", donneesTest);
-    expect(resultats).toHaveLength(1);
-    expect(resultats.some((r) => r.name === "Pomme")).toBeTruthy();
+  test("Cas nominal: Recherche par texte", () => {
+    const result = searchAlgo.search(recipes, "tarte");
+    expect(result.length).toBe(1);
+    expect(result[0].name).toBe("Tarte aux pommes");
+  });
+
+  test("Cas alternatif A1: Aucune recette ne correspond à la recherche", () => {
+    const result = searchAlgo.search(recipes, "chocolat");
+    expect(result.length).toBe(0);
+    // Simuler l'affichage du message "Aucune recette ne contient..."
+  });
+
+  test("Cas alternatif A2: Recherche par tag (ingrédient)", () => {
+    const result = searchAlgo.search(recipes, "", ["pomme"]);
+    expect(result.length).toBe(2); // Devrait retourner "Tarte aux pommes" et "Salade de fruits"
+  });
+
+  test("Cas alternatif A3: Recherche avancée avec plusieurs tags", () => {
+    const result = searchAlgo.search(
+      recipes,
+      "",
+      ["pomme"],
+      ["four"],
+      ["moule"]
+    );
+    expect(result.length).toBe(1); // Devrait retourner seulement "Tarte aux pommes"
+  });
+
+  test("Recherche avec plusieurs mots-clés dans différents champs", () => {
+    const result = searchAlgo.search(
+      recipes,
+      "grill",
+      [],
+      ["grill"],
+      ["grille"]
+    );
+    expect(result.length).toBe(1);
+    expect(result[0].name).toBe("Poisson grillé");
+  });
+
+  test("Filtrage par plusieurs mots-clés d'ingrédients", () => {
+    const result = searchAlgo.search(recipes, "", ["pomme", "sucre"]);
+    expect(result.length).toBe(1); // Devrait retourner "Tarte aux pommes"
+  });
+
+  test("Filtrage par plusieurs ustensiles", () => {
+    const result = searchAlgo.search(recipes, "", [], [], ["couteau"]);
+    expect(result.length).toBe(3); // Devrait retourner toutes les recettes car toutes utilisent un couteau
+  });
+
+  test("Filtrage par appareil spécifique", () => {
+    const result = searchAlgo.search(recipes, "", [], ["four"]);
+    expect(result.length).toBe(1); // Devrait retourner seulement "Tarte aux pommes"
+  });
+
+  test("Filtrage par combinaison d'appareils et d'ingrédients", () => {
+    const result = searchAlgo.search(recipes, "", ["pomme"], ["four"], []);
+    expect(result.length).toBe(1); // Devrait retourner "Tarte aux pommes"
+  });
+
+  test("Recherche avec combinaison de texte et tags", () => {
+    const result = searchAlgo.search(
+      recipes,
+      "grill",
+      ["poisson"],
+      ["grill"],
+      ["grille"]
+    );
+    expect(result.length).toBe(1); // Devrait retourner "Poisson grillé"
   });
 });

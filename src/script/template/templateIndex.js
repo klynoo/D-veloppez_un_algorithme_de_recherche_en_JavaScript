@@ -10,13 +10,14 @@ const builder = new DOMBuilder(creator, contentManager);
 
 // Fonction pour générer la structure de la recette
 export function recipeTemplate(data) {
-  const { name, description, /* image */ ingredients } = data;
+  const { name, description, /* image */ ingredients, time } = data;
 
   // Création de l'article principal pour la recette
   const article = creator.createElement("article", "", ["recipe"]);
   const imgContainer = creator.createElement("div", "", ["recipe__img"]);
+  builder.buildAndAppend(imgContainer, "span", `${time} min`);
   const img = creator.createElement("img");
-  /*   img.src = image; */
+  img.src = "./asset/pictures/recette01.jpg";
   img.alt = name;
   imgContainer.appendChild(img);
   article.appendChild(imgContainer);
@@ -42,7 +43,6 @@ export function recipeTemplate(data) {
   const ul = creator.createElement("ul");
   ingredients.forEach((ing) => {
     const li = creator.createElement("li");
-    // Gestion des unités et quantités pour chaque ingrédient
     let text = ing.ingredient;
     if (ing.quantity) {
       text += `: ${ing.quantity}`;

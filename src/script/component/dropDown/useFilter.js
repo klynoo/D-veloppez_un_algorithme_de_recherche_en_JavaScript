@@ -28,6 +28,11 @@ export class Dropdown {
       event.stopPropagation()
     );
 
+    // Ajouter un gestionnaire d'événements pour les clics sur les éléments <li>
+    this.dropdownContent.querySelectorAll("ul").forEach((ul) => {
+      ul.addEventListener("click", (event) => event.stopPropagation());
+    });
+
     document.addEventListener("click", Dropdown.closeAllDropdowns);
   }
 
@@ -46,3 +51,4 @@ export class Dropdown {
     });
   }
 }
+

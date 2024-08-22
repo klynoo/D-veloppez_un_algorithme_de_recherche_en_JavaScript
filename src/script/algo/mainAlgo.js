@@ -10,7 +10,7 @@ import { setupInputTracker } from "./setupInputTracker.js";
 import { recipeTemplate } from "../template/templateIndex.js";
 
 export function createMainAlgo() {
-  const searchAlgorithm = new SearchAlgorithmLoops();
+  const searchAlgorithm = new SearchAlgorithmArray();
   let wordFilter = "";
   let ingredientFilters = [];
   let ustensilFilters = [];

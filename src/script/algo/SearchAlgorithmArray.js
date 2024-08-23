@@ -87,7 +87,6 @@ export class SearchAlgorithmArray {
       );
     }
 
-    console.log("Résultats trouvés:", results);
     return results;
   }
 }

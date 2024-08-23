@@ -34,18 +34,37 @@ export class DynamicSelect {
     );
   }
 
-  addOptions(options) {
+  addOptions(options, selectedOptions = new Set()) {
+    this.selectElement.innerHTML = "";
+
     options.forEach((optionText) => {
       const option = document.createElement("li");
       option.value = optionText.toLowerCase();
       option.textContent = optionText;
+
+      if (selectedOptions.has(optionText.toLowerCase())) {
+        option.classList.add("selected");
+      }
+
       this.selectElement.appendChild(option);
     });
   }
 
-  populateSelect() {
+  populateSelect(selectedOptions = new Set()) {
     const elements = this.extractElements();
-    this.addOptions(elements);
+    this.addOptions(elements, selectedOptions);
+  }
+
+  refresh(recipes) {
+    this.recipes = recipes;
+
+    const selectedOptions = new Set(
+      Array.from(document.querySelectorAll(".filter-badge p")).map((badge) =>
+        badge.textContent.toLowerCase()
+      )
+    );
+
+    this.populateSelect(selectedOptions);
   }
 }
 
@@ -68,11 +87,21 @@ export class SearchFilter extends DynamicSelect {
 
   handleInputChange() {
     const inputValue = this.inputElement.value.toLowerCase();
+
+    const selectedOptions = new Set(
+      Array.from(document.querySelectorAll(".filter-badge p")).map((badge) =>
+        badge.textContent.toLowerCase()
+      )
+    );
+
     const filteredOptions = this.extractElements().filter((option) =>
       option.toLowerCase().includes(inputValue)
     );
-    this.selectElement.innerHTML = "";
-    this.addOptions(filteredOptions);
+    this.addOptions(filteredOptions, selectedOptions);
+  }
+
+  refreshAfterSelection(recipes) {
+    this.refresh(recipes);
   }
 }
 

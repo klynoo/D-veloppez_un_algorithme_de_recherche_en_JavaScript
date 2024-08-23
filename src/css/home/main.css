@@ -16,8 +16,13 @@
 }
 
 .recipe__img {
+  height: 253px;
+}
+
+.recipe__img img {
   width: 100%;
   height: 253px;
+  object-fit: cover;
 }
 
 .recipe__img span {

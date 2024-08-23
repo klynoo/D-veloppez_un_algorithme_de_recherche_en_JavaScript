@@ -2,12 +2,10 @@ import {
   DynamicSelect,
   SearchFilter,
 } from "../component/dropDown/dropdownUI.js";
-import {
-  SearchAlgorithmArray,
-  SearchAlgorithmLoops,
-} from "./searchAlgorithm.js";
+
 import { setupInputTracker } from "./setupInputTracker.js";
 import { recipeTemplate } from "../template/templateIndex.js";
+import { SearchAlgorithmArray } from "./SearchAlgorithmArray.js";
 
 export function createMainAlgo() {
   const searchAlgorithm = new SearchAlgorithmArray();
